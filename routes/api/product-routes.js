@@ -14,10 +14,20 @@ router.get('/', (req, res) => {
       },
       {
         model: Tag,
-        through:productTags
+        through: productTags
       }
     ]
+  }).then(dbProductData => {
+    if (!dbProductData) {
+      res.status(404).json({ message: 'No user found with this id' });
+      return;
+    }
+    res.json(dbProductData);
   })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 // get one product
