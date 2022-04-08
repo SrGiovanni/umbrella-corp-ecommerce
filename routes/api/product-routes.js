@@ -5,7 +5,6 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // get all products
 router.get('/', async (req, res) => {
-  console.log('Product???????~~~~~~~~~~~~~~~~~~~')
   // find all products
   // be sure to include its associated Category and Tag data
   const products = await Product.findAll({
@@ -20,7 +19,7 @@ router.get('/', async (req, res) => {
     ]
   }).then(dbProductData => {
     if (!dbProductData) {
-      res.status(404).json({ message: 'No user found with this id' });
+      res.status(404).json({ message: 'No product found' });
       return;
     }
     res.json(dbProductData);
@@ -45,16 +44,16 @@ router.get('/:id', (req, res) => {
       },
       {
         model: Tag,
-        through: productTags
+        through: ProductTag
       }
     ]
   })
-  .then(dbUserData => {
-    if (!dbUserData) {
-      res.status(404).json({ message: 'No user found with this id' });
+  .then(dbProductData => {
+    if (!dbProductData) {
+      res.status(404).json({ message: 'No product found with this id' });
       return;
     }
-    res.json(dbUserData);
+    res.json(dbProductData);
   })
   .catch(err => {
     console.log(err);
