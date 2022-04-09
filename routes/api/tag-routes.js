@@ -13,6 +13,17 @@ router.get('/', (req, res) => {
       }
     ]
   })
+  .then(dbTagData => {
+    if (!dbTagData) {
+      res.status(404).json({ message: 'No category found' });
+      return;
+    }
+    res.json(dbTagData);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 router.get('/:id', (req, res) => {
@@ -55,9 +66,13 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
-  Tag.update(req.body.tag_name,{
+  Tag.update(
+    {
+      tag_name: req.body.tag_name
+    },
+    {
     where: {id: req.params.id}
-  })
+    })
   .then(dbTagData => {
     if (!dbTagData[0]) {
       res.status(404).json({ message: 'No tag found with this id' });
@@ -78,12 +93,12 @@ router.delete('/:id', (req, res) => {
       id: req.params.id
     }
   })
-    .then(dbPostData => {
-      if (!dbPostData) {
+    .then(dbTagData => {
+      if (!dbTagData) {
         res.status(404).json({ message: 'No tag found with this id' });
         return;
       }
-      res.json(dbPostData);
+      res.json(dbTagData);
     })
     .catch(err => {
       console.log(err);
